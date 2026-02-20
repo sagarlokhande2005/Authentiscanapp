@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AuthentiScan | AI Image Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="logo">
+        <i class="fas fa-camera-retro"></i>
+        <span>AuthentiScan</span>
+    </div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#how">How It Works</a>
+    </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <h1>Detect AI-Generated Images</h1>
+    <p>
+        Upload any image and instantly verify whether it is real or AI-generated.
+    </p>
+</section>
+
+<!-- MAIN CARD -->
+<div class="card">
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button id="uploadTab" class="active">Upload Image</button>
+        <button id="resultTab">Analysis Results</button>
+    </div>
+
+    <!-- UPLOAD SECTION -->
+    <div id="uploadSection">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" id="imageInput" hidden required accept="image/*">
+
+            <div class="upload-box" onclick="imageInput.click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload an Image</h3>
+                <p>Tap to select image</p>
+                <span>JPG, PNG, WEBP • Max 10MB</span>
+
+                <button type="button" class="browse-btn">
+                    <i class="fas fa-folder-open"></i> Browse Files
+                </button>
+            </div>
+
+            <!-- IMAGE PREVIEW -->
+            <div class="preview-box" id="previewBox" style="display:none;">
+                <img id="previewImage">
+            </div>
+
+            <button type="submit" class="analyze-btn">
+                <i class="fas fa-search"></i> Analyze Image
+            </button>
+        </form>
+    </div>
+
+    <!-- RESULT SECTION -->
+    <div id="resultSection" style="display:none;">
+        {% if result %}
+        <div class="result">
+            <h3>{{ result }}</h3>
+            <p>{{ reason }}</p>
+        </div>
+        {% else %}
+        <p class="no-result">No analysis yet</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- HOW IT WORKS (FIXED POSITION) -->
+<section id="how" class="how">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <i class="fas fa-upload"></i>
+            <h4>Upload</h4>
+            <p>Select any image</p>
+        </div>
+        <div class="step">
+            <i class="fas fa-brain"></i>
+            <h4>Analyze</h4>
+            <p>AI checks patterns</p>
+        </div>
+        <div class="step">
+            <i class="fas fa-chart-pie"></i>
+            <h4>Result</h4>
+            <p>Real or AI verdict</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 AuthentiScan — AI Image Authenticity Platform</p>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+const imageInput = document.getElementById("imageInput");
+const previewBox = document.getElementById("previewBox");
+const previewImage = document.getElementById("previewImage");
+
+const uploadTab = document.getElementById("uploadTab");
+const resultTab = document.getElementById("resultTab");
+const uploadSection = document.getElementById("uploadSection");
+const resultSection = document.getElementById("resultSection");
+
+/* Image preview */
+imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if (file) {
+        previewImage.src = URL.createObjectURL(file);
+        previewBox.style.display = "block";
+    }
+});
+
+/* Tabs */
+uploadTab.onclick = () => {
+    uploadTab.classList.add("active");
+    resultTab.classList.remove("active");
+    uploadSection.style.display = "block";
+    resultSection.style.display = "none";
+};
+
+resultTab.onclick = () => {
+    resultTab.classList.add("active");
+    uploadTab.classList.remove("active");
+    uploadSection.style.display = "none";
+    resultSection.style.display = "block";
+};
+
+/* Auto switch after result */
+{% if result %}
+resultTab.click();
+{% endif %}
+</script>
+
+</body>
+</html>

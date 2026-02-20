@@ -1,0 +1,12 @@
+# Ignore environment file
+.env
+
+# Ignore uploaded images
+uploads/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
